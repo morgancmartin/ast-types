@@ -431,6 +431,7 @@ export namespace namedTypes {
     static?: boolean;
     typeAnnotation?: K.TypeAnnotationKind | K.TSTypeAnnotationKind | null;
     variance?: K.VarianceKind | "plus" | "minus" | null;
+    decorators?: K.DecoratorKind[] | null;
     access?: "public" | "private" | "protected" | undefined;
   }
 
