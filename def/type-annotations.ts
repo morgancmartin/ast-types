@@ -8,7 +8,7 @@ import { Fork } from "../types";
 import typesPlugin from "../lib/types";
 import sharedPlugin from "../lib/shared";
 
-export default function (fork: Fork) {
+export default function(fork: Fork) {
   var types = fork.use(typesPlugin);
   var def = types.Type.def;
   var or = types.Type.or;
@@ -43,18 +43,18 @@ export default function (fork: Fork) {
     .field("typeAnnotation", TypeAnnotation, defaults["null"]);
 
   ["ClassDeclaration",
-   "ClassExpression",
+    "ClassExpression",
   ].forEach(typeName => {
     def(typeName)
       .field("typeParameters", TypeParamDecl, defaults["null"])
       .field("superTypeParameters",
-             or(def("TypeParameterInstantiation"),
-                def("TSTypeParameterInstantiation"),
-                null),
-             defaults["null"])
+        or(def("TypeParameterInstantiation"),
+          def("TSTypeParameterInstantiation"),
+          null),
+        defaults["null"])
       .field("implements",
-             or([def("ClassImplements")],
-                [def("TSExpressionWithTypeArguments")]),
-             defaults.emptyArray);
+        or([def("ClassImplements")],
+          [def("TSExpressionWithTypeArguments")]),
+        defaults.emptyArray);
   });
 };

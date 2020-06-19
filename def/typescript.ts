@@ -4,7 +4,7 @@ import typeAnnotationsDef from "./type-annotations";
 import typesPlugin from "../lib/types";
 import sharedPlugin from "../lib/shared";
 
-export default function (fork: Fork) {
+export default function(fork: Fork) {
   // Since TypeScript is parsed by Babylon, include the core Babylon types
   // but omit the Flow-related types.
   fork.use(babelCoreDef);
@@ -15,14 +15,14 @@ export default function (fork: Fork) {
   var def = types.Type.def;
   var or = types.Type.or;
   var defaults = fork.use(sharedPlugin).defaults;
-  var StringLiteral = types.Type.from(function (value: any, deep?: any) {
+  var StringLiteral = types.Type.from(function(value: any, deep?: any) {
     if (n.StringLiteral &&
-        n.StringLiteral.check(value, deep)) {
+      n.StringLiteral.check(value, deep)) {
       return true
     }
     if (n.Literal &&
-        n.Literal.check(value, deep) &&
-        typeof value.value === "string") {
+      n.Literal.check(value, deep) &&
+      typeof value.value === "string") {
       return true;
     }
     return false;
@@ -45,22 +45,22 @@ export default function (fork: Fork) {
   // optional .typeParameters field.
   def("TSHasOptionalTypeParameterInstantiation")
     .field("typeParameters",
-           or(def("TSTypeParameterInstantiation"), null),
-           defaults["null"]);
+      or(def("TSTypeParameterInstantiation"), null),
+      defaults["null"]);
 
   // An abstract (non-buildable) base type that provide a commonly-needed
   // optional .typeParameters field.
   def("TSHasOptionalTypeParameters")
     .field("typeParameters",
-           or(def("TSTypeParameterDeclaration"), null, void 0),
-           defaults["null"]);
+      or(def("TSTypeParameterDeclaration"), null, void 0),
+      defaults["null"]);
 
   // An abstract (non-buildable) base type that provide a commonly-needed
   // optional .typeAnnotation field.
   def("TSHasOptionalTypeAnnotation")
     .field("typeAnnotation",
-           or(def("TSTypeAnnotation"), null),
-           defaults["null"]);
+      or(def("TSTypeAnnotation"), null),
+      defaults["null"]);
 
   def("TSQualifiedName")
     .bases("Node")
@@ -74,8 +74,8 @@ export default function (fork: Fork) {
     .field("expression", def("Expression"))
     .field("typeAnnotation", def("TSType"))
     .field("extra",
-           or({ parenthesized: Boolean }, null),
-           defaults["null"]);
+      or({ parenthesized: Boolean }, null),
+      defaults["null"]);
 
   def("TSNonNullExpression")
     .bases("Expression", "Pattern")
@@ -111,14 +111,14 @@ export default function (fork: Fork) {
     .bases("TSType")
     .build("literal")
     .field("literal",
-           or(def("NumericLiteral"),
-              def("StringLiteral"),
-              def("BooleanLiteral"),
-              def("TemplateLiteral"),
-              def("UnaryExpression")));
+      or(def("NumericLiteral"),
+        def("StringLiteral"),
+        def("BooleanLiteral"),
+        def("TemplateLiteral"),
+        def("UnaryExpression")));
 
   ["TSUnionType",
-   "TSIntersectionType",
+    "TSIntersectionType",
   ].forEach(typeName => {
     def(typeName)
       .bases("TSType")
@@ -152,12 +152,12 @@ export default function (fork: Fork) {
   )];
 
   ["TSFunctionType",
-   "TSConstructorType",
+    "TSConstructorType",
   ].forEach(typeName => {
     def(typeName)
       .bases("TSType",
-             "TSHasOptionalTypeParameters",
-             "TSHasOptionalTypeAnnotation")
+        "TSHasOptionalTypeParameters",
+        "TSHasOptionalTypeAnnotation")
       .build("parameters")
       .field("parameters", ParametersType);
   });
@@ -172,10 +172,10 @@ export default function (fork: Fork) {
     .field("params", [def("Pattern")])
     // tSFunctionTypeAnnotationCommon
     .field("returnType",
-           or(def("TSTypeAnnotation"),
-              def("Noop"), // Still used?
-              null),
-           defaults["null"]);
+      or(def("TSTypeAnnotation"),
+        def("Noop"), // Still used?
+        null),
+      defaults["null"]);
 
   def("TSDeclareMethod")
     .bases("Declaration", "TSHasOptionalTypeParameters")
@@ -186,8 +186,8 @@ export default function (fork: Fork) {
     // classMethodOrPropertyCommon
     .field("abstract", Boolean, defaults["false"])
     .field("accessibility",
-           or("public", "private", "protected", void 0),
-           defaults["undefined"])
+      or("public", "private", "protected", void 0),
+      defaults["undefined"])
     .field("static", Boolean, defaults["false"])
     .field("computed", Boolean, defaults["false"])
     .field("optional", Boolean, defaults["false"])
@@ -200,20 +200,20 @@ export default function (fork: Fork) {
     ))
     // classMethodOrDeclareMethodCommon
     .field("kind",
-           or("get", "set", "method", "constructor"),
-           function getDefault() { return "method"; })
+      or("get", "set", "method", "constructor"),
+      function getDefault() { return "method"; })
     .field("access", // Not "accessibility"?
-           or("public", "private", "protected", void 0),
-           defaults["undefined"])
+      or("public", "private", "protected", void 0),
+      defaults["undefined"])
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"])
+      or([def("Decorator")], null),
+      defaults["null"])
     // tSFunctionTypeAnnotationCommon
     .field("returnType",
-           or(def("TSTypeAnnotation"),
-              def("Noop"), // Still used?
-              null),
-           defaults["null"]);
+      or(def("TSTypeAnnotation"),
+        def("Noop"), // Still used?
+        null),
+      defaults["null"]);
 
   def("TSMappedType")
     .bases("TSType")
@@ -222,8 +222,8 @@ export default function (fork: Fork) {
     .field("typeParameter", def("TSTypeParameter"))
     .field("optional", or(Boolean, "+", "-"), defaults["false"])
     .field("typeAnnotation",
-           or(def("TSType"), null),
-           defaults["null"]);
+      or(def("TSType"), null),
+      defaults["null"]);
 
   def("TSTupleType")
     .bases("TSType")
@@ -256,8 +256,8 @@ export default function (fork: Fork) {
     .bases("Node")
     .build("typeAnnotation")
     .field("typeAnnotation",
-           or(def("TSType"),
-              def("TSTypeAnnotation")));
+      or(def("TSType"),
+        def("TSTypeAnnotation")));
 
   def("TSIndexSignature")
     .bases("Declaration", "TSHasOptionalTypeAnnotation")
@@ -273,13 +273,13 @@ export default function (fork: Fork) {
     .field("readonly", Boolean, defaults["false"])
     .field("optional", Boolean, defaults["false"])
     .field("initializer",
-           or(def("Expression"), null),
-           defaults["null"]);
+      or(def("Expression"), null),
+      defaults["null"]);
 
   def("TSMethodSignature")
     .bases("Declaration",
-           "TSHasOptionalTypeParameters",
-           "TSHasOptionalTypeAnnotation")
+      "TSHasOptionalTypeParameters",
+      "TSHasOptionalTypeAnnotation")
     .build("key", "parameters", "typeAnnotation")
     .field("key", def("Expression"))
     .field("computed", Boolean, defaults["false"])
@@ -290,17 +290,17 @@ export default function (fork: Fork) {
     .bases("TSTypeAnnotation")
     .build("parameterName", "typeAnnotation")
     .field("parameterName",
-           or(def("Identifier"),
-              def("TSThisType")))
+      or(def("Identifier"),
+        def("TSThisType")))
     .field("typeAnnotation", def("TSTypeAnnotation"));
 
   ["TSCallSignatureDeclaration",
-   "TSConstructSignatureDeclaration",
+    "TSConstructSignatureDeclaration",
   ].forEach(typeName => {
     def(typeName)
       .bases("Declaration",
-             "TSHasOptionalTypeParameters",
-             "TSHasOptionalTypeAnnotation")
+        "TSHasOptionalTypeParameters",
+        "TSHasOptionalTypeAnnotation")
       .build("parameters", "typeAnnotation")
       .field("parameters", ParametersType);
   });
@@ -310,8 +310,8 @@ export default function (fork: Fork) {
     .build("id", "initializer")
     .field("id", or(def("Identifier"), StringLiteral))
     .field("initializer",
-           or(def("Expression"), null),
-           defaults["null"]);
+      or(def("Expression"), null),
+      defaults["null"]);
 
   def("TSTypeQuery")
     .bases("TSType")
@@ -345,8 +345,8 @@ export default function (fork: Fork) {
     .field("typeAnnotation", def("TSType"))
     .field("expression", def("Expression"))
     .field("extra",
-           or({ parenthesized: Boolean }, null),
-           defaults["null"]);
+      or({ parenthesized: Boolean }, null),
+      defaults["null"]);
 
   def("TSTypeParameterDeclaration")
     .bases("Declaration")
@@ -366,8 +366,8 @@ export default function (fork: Fork) {
     .field("declare", Boolean, defaults["false"])
     .field("members", [def("TSEnumMember")])
     .field("initializer",
-           or(def("Expression"), null),
-           defaults["null"]);
+      or(def("Expression"), null),
+      defaults["null"]);
 
   def("TSTypeAliasDeclaration")
     .bases("Declaration", "TSHasOptionalTypeParameters")
@@ -388,10 +388,10 @@ export default function (fork: Fork) {
     .field("declare", Boolean, defaults["false"])
     .field("global", Boolean, defaults["false"])
     .field("body",
-           or(def("TSModuleBlock"),
-              def("TSModuleDeclaration"),
-              null),
-           defaults["null"]);
+      or(def("TSModuleBlock"),
+        def("TSModuleDeclaration"),
+        null),
+      defaults["null"]);
 
   def("TSImportType")
     .bases("TSType", "TSHasOptionalTypeParameterInstantiation")
@@ -405,8 +405,8 @@ export default function (fork: Fork) {
     .field("id", def("Identifier"))
     .field("isExport", Boolean, defaults["false"])
     .field("moduleReference",
-           or(TSEntityName,
-              def("TSExternalModuleReference")));
+      or(TSEntityName,
+        def("TSExternalModuleReference")));
 
   def("TSExternalModuleReference")
     .bases("Declaration")
@@ -439,24 +439,25 @@ export default function (fork: Fork) {
     .field("id", TSEntityName)
     .field("declare", Boolean, defaults["false"])
     .field("extends",
-           or([def("TSExpressionWithTypeArguments")], null),
-           defaults["null"])
+      or([def("TSExpressionWithTypeArguments")], null),
+      defaults["null"])
     .field("body", def("TSInterfaceBody"));
 
   def("TSParameterProperty")
     .bases("Pattern")
     .build("parameter")
     .field("accessibility",
-           or("public", "private", "protected", void 0),
-           defaults["undefined"])
+      or("public", "private", "protected", void 0),
+      defaults["undefined"])
     .field("readonly", Boolean, defaults["false"])
     .field("parameter", or(def("Identifier"),
-                           def("AssignmentPattern")));
+      def("AssignmentPattern")));
 
   def("ClassProperty")
     .field("access", // Not "accessibility"?
-           or("public", "private", "protected", void 0),
-           defaults["undefined"])
+      or("public", "private", "protected", void 0),
+      defaults["undefined"])
+    .field("decorators", or([def("Decorator")], null), defaults["null"]);
 
   // Defined already in es6 and babel-core.
   def("ClassBody")

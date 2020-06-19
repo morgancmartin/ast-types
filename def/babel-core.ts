@@ -36,11 +36,6 @@ export default function(fork: Fork) {
     .build("expression")
     .field("expression", def("Expression"));
 
-  def("ClassProperty")
-    .field("decorators",
-      or([def("Decorator")], null),
-      defaults["null"]);
-
   def("Property")
     .field("decorators",
       or([def("Decorator")], null),
