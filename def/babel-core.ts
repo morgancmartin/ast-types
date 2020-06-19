@@ -4,7 +4,7 @@ import sharedPlugin from "../lib/shared";
 import es7Def from "./es7";
 import { namedTypes as N } from "../gen/namedTypes";
 
-export default function (fork: Fork) {
+export default function(fork: Fork) {
   fork.use(es7Def);
 
   var types = fork.use(typesPlugin);
@@ -36,15 +36,20 @@ export default function (fork: Fork) {
     .build("expression")
     .field("expression", def("Expression"));
 
+  def("ClassProperty")
+    .field("decorators",
+      or([def("Decorator")], null),
+      defaults["null"]);
+
   def("Property")
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"]);
+      or([def("Decorator")], null),
+      defaults["null"]);
 
   def("MethodDefinition")
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"]);
+      or([def("Decorator")], null),
+      defaults["null"]);
 
   def("MetaProperty")
     .bases("Expression")
@@ -191,7 +196,7 @@ export default function (fork: Fork) {
     .build("pattern", "flags")
     .field("pattern", String)
     .field("flags", String)
-    .field("value", RegExp, function (this: N.RegExpLiteral) {
+    .field("value", RegExp, function(this: N.RegExpLiteral) {
       return new RegExp(this.pattern, this.flags);
     });
 
@@ -221,11 +226,11 @@ export default function (fork: Fork) {
     .field("generator", Boolean, defaults["false"])
     .field("async", Boolean, defaults["false"])
     .field("accessibility", // TypeScript
-           or(def("Literal"), null),
-           defaults["null"])
+      or(def("Literal"), null),
+      defaults["null"])
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"]);
+      or([def("Decorator")], null),
+      defaults["null"]);
 
   def("ObjectProperty")
     .bases("Node")
@@ -233,8 +238,8 @@ export default function (fork: Fork) {
     .field("key", or(def("Literal"), def("Identifier"), def("Expression")))
     .field("value", or(def("Expression"), def("Pattern")))
     .field("accessibility", // TypeScript
-           or(def("Literal"), null),
-           defaults["null"])
+      or(def("Literal"), null),
+      defaults["null"])
     .field("computed", Boolean, defaults["false"]);
 
   var ClassBodyElement = or(
@@ -264,7 +269,7 @@ export default function (fork: Fork) {
     .field("key", def("PrivateName"));
 
   ["ClassMethod",
-   "ClassPrivateMethod",
+    "ClassPrivateMethod",
   ].forEach(typeName => {
     def(typeName)
       .field("kind", or("get", "set", "method", "constructor"), () => "method")
@@ -304,8 +309,8 @@ export default function (fork: Fork) {
     .build("properties")
     .field("properties", [ObjectPatternProperty])
     .field("decorators",
-           or([def("Decorator")], null),
-           defaults["null"]);
+      or([def("Decorator")], null),
+      defaults["null"]);
 
   def("SpreadProperty")
     .bases("Node")
