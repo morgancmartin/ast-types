@@ -174,7 +174,7 @@ export abstract class Def<T = any> {
   constructor(
     public readonly type: Type<T>,
     public readonly typeName: string,
-  ) {}
+  ) { }
 
   isSupertypeOf(that: Def<any>): boolean {
     if (that instanceof Def) {
@@ -304,7 +304,7 @@ function shallowStringify(value: any): string {
   }
 
   if (value && typeof value === "object") {
-    return "{ " + Object.keys(value).map(function (key) {
+    return "{ " + Object.keys(value).map(function(key) {
       return key + ": " + value[key];
     }).join(", ") + " }";
   }
@@ -403,12 +403,12 @@ export default function typesPlugin(_fork: Fork) {
   };
   var builtInTypes = {} as BuiltInTypes;
 
-  function defBuiltInType<T>(example: T, name: keyof BuiltInTypes): Type<T> {
+  function defBuiltInType<T>(example: any, name: Extract<keyof BuiltInTypes, string>): Type<T> {
     const objStr = objToStr.call(example);
 
     const type = new PredicateType<T>(name, value => objToStr.call(value) === objStr);
 
-    builtInTypes[name] = type;
+    (builtInTypes[name] as any) = type;
 
     if (example && typeof example.constructor === "function") {
       builtInCtorFns.push(example.constructor);
@@ -423,7 +423,7 @@ export default function typesPlugin(_fork: Fork) {
   // that no subtyping is considered; so, for instance, isObject.check
   // returns false for [], /./, new Date, and null.
   var isString = defBuiltInType<string>("truthy", "string");
-  var isFunction = defBuiltInType<Function>(function () {}, "function");
+  var isFunction = defBuiltInType<Function>(function() { }, "function");
   var isArray = defBuiltInType<any[]>([], "array");
   var isObject = defBuiltInType<{ [key: string]: any }>({}, "object");
   var isRegExp = defBuiltInType<RegExp>(/./, "RegExp");
@@ -441,7 +441,7 @@ export default function typesPlugin(_fork: Fork) {
     if (value && typeof value === "object") {
       var type = value.type;
       if (typeof type === "string" &&
-          hasOwn.call(defCache, type)) {
+        hasOwn.call(defCache, type)) {
         var d = defCache[type];
         if (d.finalized) {
           return d;
@@ -480,7 +480,7 @@ export default function typesPlugin(_fork: Fork) {
         // assign a type property to such nodes). Be optimistic and let
         // this.checkAllFields make the final decision.
         if (this.typeName === "SourceLocation" ||
-            this.typeName === "Position") {
+          this.typeName === "Position") {
           return this.checkAllFields(value, deep);
         }
 
@@ -557,7 +557,7 @@ export default function typesPlugin(_fork: Fork) {
         } else {
           var message = "no value or default function given for field " +
             JSON.stringify(param) + " of " + this.typeName + "(" +
-            this.buildParams.map(function (name) {
+            this.buildParams.map(function(name) {
               return all[name];
             }).join(", ") + ")";
           throw new Error(message);
@@ -590,7 +590,7 @@ export default function typesPlugin(_fork: Fork) {
 
         var built: ASTNode = Object.create(nodePrototype);
 
-        this.buildParams.forEach(function (param, i) {
+        this.buildParams.forEach(function(param, i) {
           if (i < argc) {
             addParam(built, param, args[i], true)
           } else {
@@ -598,7 +598,7 @@ export default function typesPlugin(_fork: Fork) {
           }
         });
 
-        Object.keys(this.allFields).forEach(function (param) {
+        Object.keys(this.allFields).forEach(function(param) {
           // Use the default value.
           addParam(built, param, null, false);
         });
@@ -624,7 +624,7 @@ export default function typesPlugin(_fork: Fork) {
 
         var built: ASTNode = Object.create(nodePrototype);
 
-        Object.keys(this.allFields).forEach(function (param) {
+        Object.keys(this.allFields).forEach(function(param) {
           if (hasOwn.call(obj, param)) {
             addParam(built, param, obj[param], true);
           } else {
@@ -698,7 +698,7 @@ export default function typesPlugin(_fork: Fork) {
         for (var fieldName in allFields) {
           if (hasOwn.call(allFields, fieldName) &&
             !allFields[fieldName].hidden) {
-              this.fieldNames.push(fieldName);
+            this.fieldNames.push(fieldName);
           }
         }
 
@@ -714,7 +714,7 @@ export default function typesPlugin(_fork: Fork) {
         populateSupertypeList(this.typeName, this.supertypeList);
 
         if (this.buildable &&
-            this.supertypeList.lastIndexOf("Expression") >= 0) {
+          this.supertypeList.lastIndexOf("Expression") >= 0) {
           wrapExpressionBuilderWithStatement(this.typeName);
         }
       }
@@ -738,7 +738,7 @@ export default function typesPlugin(_fork: Fork) {
   // most specific supertype whose name is an own property of the candidates
   // object.
   function computeSupertypeLookupTable(candidates: any) {
-    var table: { [typeName: string ]: any } = {};
+    var table: { [typeName: string]: any } = {};
     var typeNames = Object.keys(defCache);
     var typeNameCount = typeNames.length;
 
@@ -766,7 +766,7 @@ export default function typesPlugin(_fork: Fork) {
   var nodePrototype: { [definedMethod: string]: Function } = {};
 
   // Call this function to define a new method to be shared by all AST
-   // nodes. The replaced method (if any) is returned for easy wrapping.
+  // nodes. The replaced method (if any) is returned for easy wrapping.
   function defineMethod(name: any, func?: Function) {
     var old = nodePrototype[name];
 
@@ -788,7 +788,7 @@ export default function typesPlugin(_fork: Fork) {
   }
 
   function getBuilderName(typeName: any) {
-    return typeName.replace(/^[A-Z]+/, function (upperCasePrefix: any) {
+    return typeName.replace(/^[A-Z]+/, function(upperCasePrefix: any) {
       var len = upperCasePrefix.length;
       switch (len) {
         case 0: return "";
@@ -852,7 +852,7 @@ export default function typesPlugin(_fork: Fork) {
     callback: (name: any, value: any) => any,
     context?: any
   ) {
-    getFieldNames(object).forEach(function (this: any, name: any) {
+    getFieldNames(object).forEach(function(this: any, name: any) {
       callback.call(this, name, getFieldValue(object, name));
     }, context);
   }
@@ -866,7 +866,7 @@ export default function typesPlugin(_fork: Fork) {
     callback: (name: any, value: any) => any,
     context?: any
   ) {
-    return getFieldNames(object).some(function (this: any, name: any) {
+    return getFieldNames(object).some(function(this: any, name: any) {
       return callback.call(this, name, getFieldValue(object, name));
     }, context);
   }
@@ -885,10 +885,10 @@ export default function typesPlugin(_fork: Fork) {
     // skip if there is nothing to wrap
     if (!wrapped) return;
 
-    const builder: Builder = function (...args: Parameters<typeof wrapped>) {
+    const builder: Builder = function(...args: Parameters<typeof wrapped>) {
       return builders.expressionStatement(wrapped.apply(builders, args));
     };
-    builder.from = function (...args: Parameters<typeof wrapped.from>) {
+    builder.from = function(...args: Parameters<typeof wrapped.from>) {
       return builders.expressionStatement(wrapped.from.apply(builders, args));
     }
 
@@ -932,7 +932,7 @@ export default function typesPlugin(_fork: Fork) {
   }
 
   function extend(into: any, from: any) {
-    Object.keys(from).forEach(function (name) {
+    Object.keys(from).forEach(function(name) {
       into[name] = from[name];
     });
 
@@ -940,7 +940,7 @@ export default function typesPlugin(_fork: Fork) {
   }
 
   function finalize() {
-    Object.keys(defCache).forEach(function (name) {
+    Object.keys(defCache).forEach(function(name) {
       defCache[name].finalize();
     });
   }
