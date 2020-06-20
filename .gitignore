@@ -7,4 +7,4 @@ test/data/typescript-compiler
 *.d.ts
 # Except...
 !/types/**/*.d.ts
-!/script/**/*.ts
+!/script/**/*.js
