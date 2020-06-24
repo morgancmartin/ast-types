@@ -43,7 +43,7 @@ export namespace namedTypes {
     interpreter?: K.InterpreterDirectiveKind | null;
   }
 
-  export interface Statement extends Node {}
+  export interface Statement extends Node { }
 
   export interface Function extends Node {
     id?: K.IdentifierKind | null;
@@ -58,8 +58,8 @@ export namespace namedTypes {
     typeParameters?: K.TypeParameterDeclarationKind | K.TSTypeParameterDeclarationKind | null;
   }
 
-  export interface Expression extends Node {}
-  export interface Pattern extends Node {}
+  export interface Expression extends Node { }
+  export interface Pattern extends Node { }
 
   export interface Identifier extends Omit<Expression, "type">, Omit<Pattern, "type"> {
     type: "Identifier";
@@ -171,7 +171,7 @@ export namespace namedTypes {
     body: K.StatementKind;
   }
 
-  export interface Declaration extends Statement {}
+  export interface Declaration extends Statement { }
 
   export interface VariableDeclaration extends Omit<Declaration, "type"> {
     type: "VariableDeclaration";
@@ -445,6 +445,7 @@ export namespace namedTypes {
     id: K.IdentifierKind | null;
     body: K.ClassBodyKind;
     superClass?: K.ExpressionKind | null;
+    decorators?: K.DecoratorKind[] | null;
     typeParameters?: K.TypeParameterDeclarationKind | K.TSTypeParameterDeclarationKind | null;
     superTypeParameters?: K.TypeParameterInstantiationKind | K.TSTypeParameterInstantiationKind | null;
     implements?: K.ClassImplementsKind[] | K.TSExpressionWithTypeArgumentsKind[];
@@ -460,7 +461,7 @@ export namespace namedTypes {
     implements?: K.ClassImplementsKind[] | K.TSExpressionWithTypeArgumentsKind[];
   }
 
-  export interface Specifier extends Node {}
+  export interface Specifier extends Node { }
 
   export interface ModuleSpecifier extends Specifier {
     local?: K.IdentifierKind | null;
@@ -642,7 +643,7 @@ export namespace namedTypes {
     typeParameters?: K.TypeParameterInstantiationKind | null;
   }
 
-  export interface TSType extends Node {}
+  export interface TSType extends Node { }
 
   export interface TSHasOptionalTypeParameterInstantiation {
     typeParameters?: K.TSTypeParameterInstantiationKind | null;
@@ -653,8 +654,8 @@ export namespace namedTypes {
     expression: K.IdentifierKind | K.TSQualifiedNameKind;
   }
 
-  export interface Flow extends Node {}
-  export interface FlowType extends Flow {}
+  export interface Flow extends Node { }
+  export interface FlowType extends Flow { }
 
   export interface AnyTypeAnnotation extends Omit<FlowType, "type"> {
     type: "AnyTypeAnnotation";
@@ -949,7 +950,7 @@ export namespace namedTypes {
     source?: K.LiteralKind | null;
   }
 
-  export interface FlowPredicate extends Flow {}
+  export interface FlowPredicate extends Flow { }
 
   export interface InferredPredicate extends Omit<FlowPredicate, "type"> {
     type: "InferredPredicate";

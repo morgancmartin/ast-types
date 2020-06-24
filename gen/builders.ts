@@ -914,6 +914,7 @@ export interface ClassDeclarationBuilder {
       implements?: K.ClassImplementsKind[] | K.TSExpressionWithTypeArgumentsKind[],
       loc?: K.SourceLocationKind | null,
       superClass?: K.ExpressionKind | null,
+      decorators?: K.DecoratorKind[] | null,
       superTypeParameters?: K.TypeParameterInstantiationKind | K.TSTypeParameterInstantiationKind | null,
       typeParameters?: K.TypeParameterDeclarationKind | K.TSTypeParameterDeclarationKind | null
     }

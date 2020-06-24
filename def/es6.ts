@@ -3,7 +3,7 @@ import coreDef from "./core";
 import typesPlugin from "../lib/types";
 import sharedPlugin from "../lib/shared";
 
-export default function (fork: Fork) {
+export default function(fork: Fork) {
   fork.use(coreDef);
 
   var types = fork.use(typesPlugin);
@@ -183,7 +183,8 @@ export default function (fork: Fork) {
     .build("id", "body", "superClass")
     .field("id", or(def("Identifier"), null))
     .field("body", def("ClassBody"))
-    .field("superClass", or(def("Expression"), null), defaults["null"]);
+    .field("superClass", or(def("Expression"), null), defaults["null"])
+    .field("decorators", or([def("Decorator")], null), defaults["null"]);
 
   def("ClassExpression")
     .bases("Expression")
@@ -259,6 +260,6 @@ export default function (fork: Fork) {
   def("TemplateElement")
     .bases("Node")
     .build("value", "tail")
-    .field("value", {"cooked": String, "raw": String})
+    .field("value", { "cooked": String, "raw": String })
     .field("tail", Boolean);
 };
